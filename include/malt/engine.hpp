@@ -39,13 +39,13 @@ namespace malt
     template <class MsgT, class... Args>
     void broadcast(MsgT, const Args&... args) {
         impl::msg_delivery<MsgT(Args...)>::broadcast(MsgT{}, args...);
-    };
+    }
 
     template <class CompT, class FunT>
     void for_each_component(const FunT& t)
     {
         impl::component_adapter<CompT>::for_components(t);
-    };
+    }
 
     entity create_entity();
 

@@ -35,7 +35,7 @@ namespace malt
             auto cmp = get_component(id);
             if (!cmp) return;
             cmp->Handle(MsgT{}, std::forward<Args>(args)...);
-        };
+        }
 
         template <class MsgT, class... Args>
         void broadcast_impl(std::true_type, MsgT, Args&&... args)
@@ -56,13 +56,13 @@ namespace malt
                 }
                 c.Handle(MsgT{}, std::forward<Args>(args)...);
             }
-        };
+        }
 
         template <class MsgT, class... Args>
-        void deliver(std::false_type, entity_id, MsgT, Args&&... args){};
+        void deliver(std::false_type, entity_id, MsgT, Args&&... args){}
 
         template <class MsgT, class... Args>
-        void broadcast_impl(std::false_type, MsgT, Args&&... args){};
+        void broadcast_impl(std::false_type, MsgT, Args&&... args){}
 
         void synchronize();
 
@@ -99,13 +99,13 @@ namespace malt
         void deliver(entity_id id, MsgT, Args&&... args)
         {
             deliver(can_handle<MsgT(Args...)>::template value<CompT>(), id, MsgT{}, std::forward<Args>(args)...);
-        };
+        }
 
         template <class MsgT, class... Args>
         void broadcast(MsgT, Args&&... args)
         {
             broadcast_impl(can_handle<MsgT(Args...)>::template value<CompT>(), MsgT{}, std::forward<Args>(args)...);
-        };
+        }
     };
 }
 
