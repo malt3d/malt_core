@@ -1,6 +1,6 @@
 {
   "name": "malt_core",
-  "readable_name": "Malt.Core",
+  "readable_name": "malt.core",
   "version": "0.1.0",
   "components": [],
   "globals": [],
