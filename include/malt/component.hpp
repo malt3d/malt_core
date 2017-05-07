@@ -7,10 +7,11 @@
 #include <malt/malt_fwd.hpp>
 #include <malt/entity.hpp>
 #include "message.hpp"
+#include "track_ptr.hpp"
 
 namespace malt
 {
-    class component
+    class component : public tracked<component>
     {
         entity m_e;
         bool m_enabled = true;
@@ -20,7 +21,6 @@ namespace malt
 
         template <class T>
         friend class component_mgr;
-
 
     public:
         component() = default;

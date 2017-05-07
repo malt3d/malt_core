@@ -20,6 +20,8 @@ elseif(CMAKE_COMPILER_IS_GNUCC OR CMAKE_COMPILER_IS_GNUCXX)
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Wno-long-long -pedantic -Werror")
 endif()
 
+file(COPY "${CMAKE_CURRENT_SOURCE_DIR}/3rd_party/track_ptr/track_ptr.hpp" DESTINATION "${CMAKE_CURRENT_SOURCE_DIR}/include/malt/")
+
 set(HEADER_PATH "${CMAKE_CURRENT_SOURCE_DIR}/include/malt")
 set(HEADER_FILES
         ${HEADER_PATH}/component_mgr.hpp
@@ -35,9 +37,11 @@ set(HEADER_FILES
         ${HEADER_PATH}/game_impl.hpp
         ${HEADER_PATH}/module_impl.hpp
         ${HEADER_PATH}/component_mgr_impl.hpp
+        ${HEADER_PATH}/engine_impl.hpp
+        ${HEADER_PATH}/track_ptr.hpp
         )
 
-set(SOURCE_FILES component.cpp entity.cpp)
+set(SOURCE_FILES src/component.cpp src/entity.cpp )
 
 add_library(malt_core SHARED ${SOURCE_FILES})
 malt_def_module(malt_core)
