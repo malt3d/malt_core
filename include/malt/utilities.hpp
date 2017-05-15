@@ -35,5 +35,32 @@ namespace malt
 
     namespace detail {
         entity_id get_id(const entity& e);
+        template <class T>
+        class at_exit
+        {
+            bool dismiss = false;
+            T t;
+        public:
+            explicit at_exit(T&& t) : t(std::forward<T>(t)) {}
+
+            at_exit(const T&) = delete;
+
+            at_exit(at_exit&& rhs) :
+                t(std::move(rhs.t))
+            {
+                rhs.dismiss = true;
+            }
+
+            at_exit& operator=(const T&) = delete;
+            at_exit& operator=(T&&) = delete;
+
+            ~at_exit(){ if(dismiss) return; t(); }
+        };
+    }
+
+    template <class T>
+    auto at_exit(T&& t)
+    {
+        return detail::at_exit<T>(std::forward<T>(t));
     }
 }

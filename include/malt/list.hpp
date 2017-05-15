@@ -3,8 +3,14 @@
 
 namespace malt
 {
-namespace mp
+namespace meta
 {
+    template <class T>
+    struct type
+    {
+        using inner = T;
+    };
+
     template <typename...> struct list {};
 
     template <class...> struct append;

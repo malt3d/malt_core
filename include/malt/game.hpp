@@ -13,7 +13,7 @@ namespace malt
     template <class CompT, class ModuleT>
     constexpr bool has_component_impl()
     {
-        return mp::index_of_t<CompT, typename ModuleT::component_ts>() >= 0;
+        return meta::index_of_t<CompT, typename ModuleT::component_ts>() >= 0;
     }
 
     template <class CompT>
@@ -50,8 +50,8 @@ namespace malt
         template <class CompT>
         component_mgr<CompT>& get_mgr()
         {
-            using mapped = mp::filter_t<has_component<CompT>, module_ts>;
-            return mp::front_t<mapped>:: template get_mgr<CompT>();
+            using mapped = meta::filter_t<has_component<CompT>, module_ts>;
+            return meta::front_t<mapped>:: template get_mgr<CompT>();
         }
     };
 

@@ -16,8 +16,8 @@ namespace malt
     {
     public:
         using component_ts = typename T::components;
-        using component_mgr_ts = malt::mp::map_t<malt::mp::mapper<component_mgr>, component_ts>;
-        using component_mgr_tuples = malt::mp::convert_t<std::tuple, component_mgr_ts>;
+        using component_mgr_ts = malt::meta::map_t<malt::meta::mapper<component_mgr>, component_ts>;
+        using component_mgr_tuples = malt::meta::convert_t<std::tuple, component_mgr_ts>;
 
     private:
         static component_mgr_tuples comp_mgrs;
@@ -30,7 +30,7 @@ namespace malt
         template<class CompT>
         static component_mgr<CompT>& get_mgr()
         {
-            constexpr auto index = malt::mp::index_of_t<CompT, component_ts>();
+            constexpr auto index = malt::meta::index_of_t<CompT, component_ts>();
             static_assert(index >= 0, "Component doesn't belong to module");
             return std::get<index>(comp_mgrs);
         }
