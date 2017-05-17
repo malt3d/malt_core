@@ -4,6 +4,7 @@
 
 #pragma once
 
+#include <malt/malt_fwd.hpp>
 #include <type_traits>
 #include "component_traits.hpp"
 
