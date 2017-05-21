@@ -4,6 +4,7 @@
 
 #pragma once
 
+#include <malt/engine_defs.hpp>
 #include <malt/malt_fwd.hpp>
 #include <malt/entity.hpp>
 #include "message.hpp"
@@ -11,7 +12,7 @@
 
 namespace malt
 {
-    class component : public tracked<component>
+    class MALT_PUBLIC component : public tracked<component>
     {
         entity m_e;
         bool m_enabled = true;
