@@ -63,6 +63,10 @@ namespace malt
         });
     }
 
+    /*
+     * this stupid struct is used because for some reason the linker complains if we directly
+     * instantiate the tuple type in the static template function
+     */
     template <class T, class U>
     struct stupid_workaround
     {
@@ -79,6 +83,8 @@ namespace malt
 
         //std::cout << boost::typeindex::type_id<derived_from_T>().pretty_name() << '\n';
         //std::cout << boost::typeindex::type_id<tuple_t>().pretty_name() << '\n';
+
+        // see the comment on the stupid_workaround class
         thread_local stupid_workaround<T, tuple_t> erased_storage_;
 
         auto& erased_storage = erased_storage_.u;
