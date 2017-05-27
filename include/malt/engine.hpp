@@ -19,6 +19,7 @@ namespace malt
             static component_mgr<CompT>& get_mgr() MALT_WEAK_SYMBOL;
             static void for_components(std::function<void(CompT*)>) MALT_WEAK_SYMBOL;
             static void destroy(CompT*) MALT_WEAK_SYMBOL;
+            static erased_range<CompT, component> get_components() MALT_WEAK_SYMBOL;
         };
 
         template <class MsgT, class... Args> struct msg_delivery;
@@ -47,6 +48,12 @@ namespace malt
     void for_each_component(const FunT& t)
     {
         impl::component_adapter<CompT>::for_components(t);
+    }
+
+    template <class CompT>
+    erased_range<CompT, component> get_components()
+    {
+        return impl::component_adapter<CompT>::get_components();
     }
 
     entity create_entity();

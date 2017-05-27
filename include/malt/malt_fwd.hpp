@@ -12,4 +12,7 @@ namespace malt
     template <class> class module;
 
     template <class> class game;
+
+    template <class, class>
+    struct erased_range;
 }

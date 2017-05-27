@@ -132,6 +132,26 @@ namespace meta
         for_each(tail_t<List>(), f);
     }
 
+    template <class A, class B, class F>
+    constexpr void for_each2(list<A, B>, F&& f) {
+        f((A*) nullptr, (B*) nullptr);
+    }
+
+    template <class A, class F>
+    constexpr void for_each2(list<A>, F&& f) {
+    }
+
+    template <class ListT, class FunT>
+    constexpr void for_each2(ListT, FunT&& f)
+    {
+        using tail = tail_t<ListT>;
+        f(
+                static_cast<front_t<ListT>*>(nullptr),
+                static_cast<front_t<tail>*>(nullptr)
+        );
+        for_each2(tail{}, f);
+    };
+
     template <bool, class...> struct filter;
 
     template <class Head, class Filter>
@@ -163,26 +183,33 @@ namespace meta
 
     template <class...> struct concat;
 
-    template <class First, class Second, class... Rest>
-    struct concat<First, Second, Rest...>
-    {
-        using type = concat<concat<First, Second>, Rest...>;
-    };
-
     template <class... Ts, class... Us>
     struct concat<list<Ts...>, list<Us...>>
     {
         using type = list<Ts..., Us...>;
     };
+
     template <class... Ts>
     using concat_t = typename concat<Ts...>::type;
 
     template <class> struct merge;
 
-    template <class... Ts>
-    struct merge<list<Ts...>>
+    template <class First, class Second>
+    struct merge<list<First, Second>>
     {
-        using type = concat_t<Ts...>;
+        using type = concat_t<First, Second>;
+    };
+
+    template <class First>
+    struct merge<list<First>>
+    {
+        using type = First;
+    };
+
+    template <class First, class Second, class... Rest>
+    struct merge<list<First, Second, Rest...>>
+    {
+        using type = typename merge<list<concat_t<First, Second>, Rest...>>::type;
     };
 
     template <class listT>

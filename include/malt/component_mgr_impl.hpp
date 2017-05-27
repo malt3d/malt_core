@@ -1,4 +1,4 @@
-//
+//g
 // Created by fatih on 4/27/17.
 //
 
@@ -13,12 +13,6 @@
 
 namespace malt
 {
-    template <class CompT>
-    class comp_mgr_priv
-    {
-    public:
-    };
-
     template <class CompT>
     component_mgr<CompT>::component_mgr()
     {
@@ -66,17 +60,12 @@ namespace malt
         {
             if (detail::get_id(comp_it->get_entity()))
             {
-                if (comp_it->is_enabled())
-                {
-                    //try_dispatch(comp_it, update{});
-                }
             }
             else
             {
                 if (detail::get_id(aside_it->get_entity()))
                 {
                     try_dispatch(aside_it, start{});
-                    //try_dispatch(aside_it, update{});
                     *comp_it = std::move(*aside_it);
                 }
                 ++aside_it;
@@ -84,20 +73,11 @@ namespace malt
             ++comp_it;
         }
 
-        for(; comp_it != comps.end(); ++comp_it)
-        {
-            if (comp_it->is_enabled())
-            {
-                //try_dispatch(comp_it, update{});
-            }
-        }
-
         for(auto bcomp_it = std::back_inserter(comps); aside_it != aside.end(); ++aside_it, ++bcomp_it)
         {
             if (detail::get_id(aside_it->get_entity()))
             {
                 try_dispatch(aside_it, start{});
-                //try_dispatch(aside_it, update{});
                 *bcomp_it = std::move(*aside_it);
             }
         }
@@ -109,8 +89,15 @@ namespace malt
     void component_mgr<CompT>::remove_component(CompT* c)
     {
         try_dispatch(c, destruct{});
-
         c->m_e = entity(0);
+    }
+
+    template <class CompT>
+    void component_mgr<CompT>::place_containers(erased_containers<component>& conts)
+    {
+        conts.m_begin_container = get_container<component>(comps);
+        conts.m_end_container = get_container<component>(aside);
+        conts.m_begin_container.m_next = &conts.m_end_container;
     }
 
     template <class CompT>

@@ -9,6 +9,7 @@
 #include <malt/component_traits.hpp>
 #include <vector>
 #include <malt/utilities.hpp>
+#include <malt/strided_iterator.hpp>
 
 namespace malt
 {
@@ -108,6 +109,8 @@ namespace malt
         {
             broadcast_impl(can_handle<MsgT(Args...)>::template value<CompT>(), MsgT{}, std::forward<Args>(args)...);
         }
+
+        void place_containers(erased_containers<component>& conts);
     };
 }
 

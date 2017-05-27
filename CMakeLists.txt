@@ -41,7 +41,7 @@ set(HEADER_FILES
         ${HEADER_PATH}/track_ptr.hpp
         )
 
-set(SOURCE_FILES src/component.cpp src/entity.cpp )
+set(SOURCE_FILES src/component.cpp src/entity.cpp include/malt/strided_iterator.hpp)
 
 add_library(malt_core SHARED ${SOURCE_FILES})
 malt_def_module(malt_core)
