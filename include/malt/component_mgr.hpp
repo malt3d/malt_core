@@ -68,6 +68,8 @@ namespace malt
 
     public:
         component_mgr();
+        component_mgr(const component_mgr&) = delete;
+        component_mgr(component_mgr&&) = delete;
         ~component_mgr();
         CompT* get_component(entity_id id);
         CompT* add_component(entity_id id);

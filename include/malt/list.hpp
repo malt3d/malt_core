@@ -162,6 +162,13 @@ namespace meta
     using filter_t = typename filter<Filter:: template value<front_t<T>>(), Filter, T>::type;
 
     template <class...> struct concat;
+
+    template <class First, class Second, class... Rest>
+    struct concat<First, Second, Rest...>
+    {
+        using type = concat<concat<First, Second>, Rest...>;
+    };
+
     template <class... Ts, class... Us>
     struct concat<list<Ts...>, list<Us...>>
     {
@@ -169,6 +176,17 @@ namespace meta
     };
     template <class... Ts>
     using concat_t = typename concat<Ts...>::type;
+
+    template <class> struct merge;
+
+    template <class... Ts>
+    struct merge<list<Ts...>>
+    {
+        using type = concat_t<Ts...>;
+    };
+
+    template <class listT>
+    using merge_t = typename merge<listT>::type;
 
     template<class...> struct length;
     template<class... Ts>

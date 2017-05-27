@@ -12,7 +12,7 @@
 
 namespace malt
 {
-    class MALT_PUBLIC component : public tracked<component>
+    class MALT_PUBLIC component : public tracked
     {
         entity m_e;
         bool m_enabled = true;
