@@ -4,8 +4,10 @@
 
 #pragma once
 
+#include <malt/malt_fwd.hpp>
 #include <type_traits>
 #include "component_traits.hpp"
+#include <malt/engine_defs.hpp>
 
 namespace malt
 {
@@ -34,7 +36,8 @@ namespace malt
     }
 
     namespace detail {
-        entity_id get_id(const entity& e);
+        MALT_PUBLIC entity_id get_id(const entity& e);
+
         template <class T>
         class at_exit
         {

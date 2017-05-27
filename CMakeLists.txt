@@ -46,4 +46,8 @@ set(SOURCE_FILES src/component.cpp src/entity.cpp )
 add_library(malt_core SHARED ${SOURCE_FILES})
 malt_def_module(malt_core)
 
+set_target_properties(malt_core PROPERTIES CXX_VISIBILITY_PRESET hidden)
+set_target_properties(malt_core PROPERTIES C_VISIBILITY_PRESET hidden)
+
+
 malt_install(malt_core ${HEADER_PATH})
