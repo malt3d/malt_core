@@ -119,6 +119,20 @@ namespace malt
             std::cout << " + " << boost::typeindex::type_id<type1>().pretty_name() << '\n';
         });
     }
+
+    template <class GameT>
+    game<GameT>::game()
+    {
+        meta::for_each(comp_ts{}, [this](auto*c)
+        {
+            using type1 = std::remove_pointer_t<decltype(c)>;
+            auto name = component_name<type1>::name;
+            erased_adders[hash_c_string(name, strlen(name))] = [&](entity_id id) -> malt::component*
+            {
+                return this->get_mgr(meta::type<type1>()).add_component(id);
+            };
+        });
+    }
 }
 
 #define MALT_IMPLEMENT_GAME(GAME_T) \

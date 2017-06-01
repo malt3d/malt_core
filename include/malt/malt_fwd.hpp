@@ -2,9 +2,14 @@
 // Created by fatih on 4/27/17.
 //
 
+#include <cstdint>
+
 namespace malt
 {
-    using entity_id = int;
+    using entity_id = uint32_t;
+    using comp_t_id = uint32_t;
+    using module_id = uint32_t;
+
     class entity;
     class component;
 

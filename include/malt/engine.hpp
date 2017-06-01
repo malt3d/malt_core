@@ -37,6 +37,8 @@ namespace malt
         void terminate() MALT_WEAK_SYMBOL;
         bool is_terminated() MALT_WEAK_SYMBOL;
         float get_delta_time() MALT_WEAK_SYMBOL;
+
+        malt::component* add_component(const comp_t_id& comp_type, entity_id) MALT_WEAK_SYMBOL;
     }
 
     template <class MsgT, class... Args>
@@ -67,6 +69,9 @@ namespace malt
 
     inline void terminate() { impl::terminate(); }
     inline bool is_terminated() { return impl::is_terminated(); }
+
+    malt::component* add_component(const comp_t_id& c_id, entity_id e_id) MALT_PUBLIC;
+    malt::component* add_component(const char* comp_type_name, entity_id e_id) MALT_PUBLIC;
 
     namespace time
     {

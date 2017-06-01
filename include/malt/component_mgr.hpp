@@ -27,6 +27,8 @@ namespace malt
         std::vector<CompT> comps;
         std::vector<CompT> aside; //TODO: use malt::buffer
 
+        reflection::component_type<CompT> m_reflect;
+
         template <class>
         friend class game;
 
@@ -111,6 +113,13 @@ namespace malt
         }
 
         void place_containers(erased_containers<component>& conts);
+
+        CompT* try_cast(component* ptr);
+
+        const reflection::icomponent_type* get_type() const
+        {
+            return &m_reflect;
+        }
     };
 }
 

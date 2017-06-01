@@ -8,6 +8,7 @@
 #include "malt_fwd.hpp"
 #include "list.hpp"
 #include <malt/entity.hpp>
+#include <unordered_map>
 
 namespace malt
 {
@@ -52,10 +53,18 @@ namespace malt
         using module_ts = typename GameConfig::modules;
         using comp_ts = meta::merge_t<meta::map_t<get_comps, module_ts>>;
 
+        std::unordered_map<comp_t_id, std::function<malt::component*(entity_id)>> erased_adders;
+
         entity_id next = 1;
     public:
 
+        game();
         void diagnostics();
+
+        malt::component* erased_add_component(comp_t_id c, entity_id e)
+        {
+            return erased_adders[c](e);
+        }
 
         template <class MsgT, class... Args>
         void deliver(malt::entity_id id, MsgT, const Args&...);
