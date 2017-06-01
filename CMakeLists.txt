@@ -41,9 +41,12 @@ set(HEADER_FILES
         ${HEADER_PATH}/component_mgr_impl.hpp
         ${HEADER_PATH}/engine_impl.hpp
         ${HEADER_PATH}/track_ptr.hpp
+        ${HEADER_PATH}/strided_iterator.hpp
+        ${HEADER_PATH}/malt_reflect.hpp
+        ${HEADER_PATH}/malt_reflect_impl.hpp
         )
 
-set(SOURCE_FILES src/component.cpp src/entity.cpp include/malt/strided_iterator.hpp include/malt/malt_reflect.hpp include/malt/malt_reflect_impl.hpp)
+set(SOURCE_FILES src/component.cpp src/entity.cpp)
 
 add_library(malt_core SHARED ${SOURCE_FILES})
 malt_def_module(malt_core)
