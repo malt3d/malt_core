@@ -8,8 +8,6 @@
 #include <malt/component_mgr.hpp>
 
 namespace malt {
-
-
     class entity
     {
         entity_id id;

@@ -7,14 +7,16 @@
 #include <malt/engine_defs.hpp>
 #include <malt/malt_fwd.hpp>
 #include <malt/entity.hpp>
-#include "message.hpp"
-#include "track_ptr.hpp"
+#include <malt/malt_reflect.hpp>
+#include <malt/track_ptr.hpp>
+#include <malt/message.hpp>
 
 namespace malt
 {
     class MALT_PUBLIC component : public tracked
     {
         entity m_e;
+        const reflection::icomponent_type* m_type;
         bool m_enabled = true;
 
         template <class T>
@@ -22,6 +24,8 @@ namespace malt
 
         template <class T>
         friend class component_mgr;
+
+        friend const reflection::icomponent_type* reflect(component*);
 
     public:
         component() = default;

@@ -5,7 +5,6 @@
 #pragma once
 
 #include <type_traits>
-#include <malt/engine.hpp>
 
 namespace malt
 {
@@ -44,42 +43,5 @@ namespace malt
         static size_t hash;
     };
 
-    namespace reflection
-    {
-        class icomponent_type
-        {
-        public:
-            virtual const char* get_name() const = 0;
-            virtual size_t get_type_hash() const = 0;
-            virtual module_id get_module_id() const = 0;
-            virtual malt::component* add_component(entity_id id) = 0;
-            virtual ~icomponent_type() = default;
-        };
-
-        template <class comp_t>
-        class component_type : public icomponent_type
-        {
-        public:
-            const char* get_name() const override
-            {
-                return component_name<comp_t>::name;
-            }
-
-            size_t get_type_hash() const override
-            {
-                return component_name<comp_t>::hash;
-            }
-
-            module_id get_module_id() const override
-            {
-                throw std::runtime_error("not implemented yet");
-            }
-
-            component* add_component(entity_id id) override
-            {
-                return malt::add_component(get_module_id(), id);
-            }
-        };
-    }
 }
 

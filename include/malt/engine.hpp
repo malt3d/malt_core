@@ -8,6 +8,7 @@
 #include <malt/malt_fwd.hpp>
 #include <utility>
 #include <malt/engine_defs.hpp>
+#include <malt/malt_reflect.hpp>
 
 namespace malt
 {
@@ -72,6 +73,8 @@ namespace malt
 
     malt::component* add_component(const comp_t_id& c_id, entity_id e_id) MALT_PUBLIC;
     malt::component* add_component(const char* comp_type_name, entity_id e_id) MALT_PUBLIC;
+
+    const reflection::icomponent_type* reflect(component* c) MALT_PUBLIC;
 
     namespace time
     {

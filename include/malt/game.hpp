@@ -25,11 +25,18 @@ namespace malt
         static constexpr auto value(){ return has_component_impl<CompT, ModuleT>(); }
     };
 
-    template <class CompT>
+    template <class CompT, bool include_self = true>
     struct is_base_of
     {
         template <class OtherT>
-        static constexpr auto value() { return std::is_base_of<CompT, OtherT>{} || std::is_same<CompT, OtherT>{}; }
+        static constexpr auto value() { return std::is_base_of<CompT, OtherT>{} || (include_self && std::is_same<CompT, OtherT>{}); }
+    };
+
+    template <class CompT, bool include_self = true>
+    struct is_derived_from
+    {
+        template <class OtherT>
+        static constexpr auto value() { return std::is_base_of<OtherT, CompT>{} && (!include_self && !std::is_same<CompT, OtherT>{}); }
     };
 
     struct get_comps

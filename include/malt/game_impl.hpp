@@ -131,6 +131,15 @@ namespace malt
             {
                 return this->get_mgr(meta::type<type1>()).add_component(id);
             };
+
+            using derived_from_T = meta::filter_t<is_derived_from<type1, false>, comp_ts>;
+            auto type = static_cast<const reflection::component_type<type1>*>(this->get_mgr(meta::type<type1>()).get_type());
+
+            meta::for_each(derived_from_T{}, [this, type](auto* c)
+            {
+                using base_t = std::remove_pointer_t<decltype(c)>;
+                type->add_base(this->get_mgr(meta::type<base_t>()).get_type());
+            });
         });
     }
 }

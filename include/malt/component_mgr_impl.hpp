@@ -24,6 +24,7 @@ namespace malt
     {
         aside.emplace_back();
         aside.back().m_e = entity(id);
+        aside.back().m_type = &m_reflect;
 
         auto res = &aside.back();
         try_dispatch(res, init{});

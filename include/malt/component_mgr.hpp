@@ -10,6 +10,7 @@
 #include <vector>
 #include <malt/utilities.hpp>
 #include <malt/strided_iterator.hpp>
+#include <malt/malt_reflect_impl.hpp>
 
 namespace malt
 {
