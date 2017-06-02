@@ -117,7 +117,7 @@ namespace malt
 
         CompT* try_cast(component* ptr);
 
-        const reflection::icomponent_type* get_type() const
+        const reflection::icomponent* get_type() const
         {
             return &m_reflect;
         }

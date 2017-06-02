@@ -21,7 +21,7 @@ namespace malt
         return impl::add_component(c_id, e_id);
     }
 
-    const reflection::icomponent_type* reflect(component* c)
+    const reflection::icomponent* reflect(component* c)
     {
         return c->m_type;
     }

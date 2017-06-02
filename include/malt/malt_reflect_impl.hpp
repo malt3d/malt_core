@@ -9,9 +9,9 @@ namespace malt
     namespace reflection
     {
         template <class comp_t>
-        class component_type : public icomponent_type
+        class component_type : public icomponent
         {
-            mutable std::vector<const icomponent_type*> m_bases;
+            mutable std::vector<const icomponent*> m_bases;
 
         public:
             const char* get_name() const override
@@ -43,7 +43,7 @@ namespace malt
                 return { &m_bases.front(), &m_bases.back() + 1 };
             }
 
-            void add_base(const icomponent_type* ptr) const
+            void add_base(const icomponent* ptr) const
             {
                 m_bases.push_back(ptr);
             }

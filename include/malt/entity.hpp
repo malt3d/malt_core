@@ -36,8 +36,6 @@ namespace malt {
         template<class MsgT, class... ArgTs>
         void deliver_message(MsgT, const ArgTs& ... args);
     };
-
-
 }
 
 #include <malt/engine.hpp>

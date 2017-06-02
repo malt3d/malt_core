@@ -99,10 +99,13 @@ namespace malt
     /*
      * Gets runtime reflection information from a component
      */
-    const reflection::icomponent_type* reflect(component* c) MALT_PUBLIC;
+    const reflection::icomponent* reflect(component* c) MALT_PUBLIC;
 
     namespace time
     {
+        /*
+         * Returns the time it took to render the last frame in seconds
+         */
         inline float get_delta_time() {
             return impl::get_delta_time();
         }

@@ -16,7 +16,7 @@ namespace malt
     class MALT_PUBLIC component : public tracked
     {
         entity m_e;
-        const reflection::icomponent_type* m_type;
+        const reflection::icomponent* m_type;
         bool m_enabled = true;
 
         template <class T>
@@ -25,7 +25,7 @@ namespace malt
         template <class T>
         friend class component_mgr;
 
-        friend const reflection::icomponent_type* reflect(component*);
+        friend const reflection::icomponent* reflect(component*);
 
     public:
         component() = default;
