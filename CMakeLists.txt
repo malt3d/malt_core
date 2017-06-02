@@ -43,7 +43,7 @@ set(HEADER_FILES
 
 set(SOURCE_FILES src/component.cpp src/entity.cpp include/malt/strided_iterator.hpp)
 
-add_library(malt_core SHARED ${SOURCE_FILES})
+add_library(malt_core ${MALT_LIB_TYPE} ${SOURCE_FILES})
 malt_def_module(malt_core)
 
 set_target_properties(malt_core PROPERTIES CXX_VISIBILITY_PRESET hidden)
