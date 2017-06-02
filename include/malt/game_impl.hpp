@@ -119,6 +119,29 @@ namespace malt
             std::cout << " + " << boost::typeindex::type_id<type1>().pretty_name() << '\n';
         });
     }
+
+    template <class GameT>
+    game<GameT>::game()
+    {
+        meta::for_each(comp_ts{}, [this](auto*c)
+        {
+            using type1 = std::remove_pointer_t<decltype(c)>;
+            auto name = component_name<type1>::name;
+            erased_adders[hash_c_string(name, strlen(name))] = [&](entity_id id) -> malt::component*
+            {
+                return this->get_mgr(meta::type<type1>()).add_component(id);
+            };
+
+            using derived_from_T = meta::filter_t<is_derived_from<type1, false>, comp_ts>;
+            auto type = static_cast<const reflection::component_type<type1>*>(this->get_mgr(meta::type<type1>()).get_type());
+
+            meta::for_each(derived_from_T{}, [this, type](auto* c)
+            {
+                using base_t = std::remove_pointer_t<decltype(c)>;
+                type->add_base(this->get_mgr(meta::type<base_t>()).get_type());
+            });
+        });
+    }
 }
 
 #define MALT_IMPLEMENT_GAME(GAME_T) \

@@ -35,5 +35,13 @@ namespace malt
 
     template <class U, class... Args>
     struct can_handle<U(Args...)> : public can_handle<U, Args...> {};
+
+    template <class T>
+    struct component_name
+    {
+        static const char* name;
+        static size_t hash;
+    };
+
 }
 

@@ -24,6 +24,7 @@ namespace malt
     {
         aside.emplace_back();
         aside.back().m_e = entity(id);
+        aside.back().m_type = &m_reflect;
 
         auto res = &aside.back();
         try_dispatch(res, init{});
@@ -101,8 +102,25 @@ namespace malt
     }
 
     template <class CompT>
+    CompT* component_mgr<CompT>::try_cast(component* ptr)
+    {
+        if (!comps.empty() && &comps.front() <= ptr && &comps.back() >= ptr)
+        {
+            return static_cast<CompT*>(ptr);
+        }
+        if (!aside.empty() && &aside.front() <= ptr && &aside.back() >= ptr)
+        {
+            return static_cast<CompT*>(ptr);
+        }
+
+        return nullptr;
+    }
+
+    template <class CompT>
     component_mgr<CompT>::~component_mgr() = default;
 }
 
 #define MALT_IMPLEMENT_COMP(COMPT) \
-    template class malt::component_mgr<COMPT>;
+    template class malt::component_mgr<COMPT>; \
+    template<> const char* malt::component_name<COMPT>::name = #COMPT; \
+    template<> size_t malt::component_name<COMPT>::hash = hash_c_string(#COMPT, strlen(#COMPT));

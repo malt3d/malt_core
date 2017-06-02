@@ -10,6 +10,7 @@
 #include <vector>
 #include <malt/utilities.hpp>
 #include <malt/strided_iterator.hpp>
+#include <malt/malt_reflect_impl.hpp>
 
 namespace malt
 {
@@ -26,6 +27,8 @@ namespace malt
          */
         std::vector<CompT> comps;
         std::vector<CompT> aside; //TODO: use malt::buffer
+
+        reflection::component_type<CompT> m_reflect;
 
         template <class>
         friend class game;
@@ -111,6 +114,13 @@ namespace malt
         }
 
         void place_containers(erased_containers<component>& conts);
+
+        CompT* try_cast(component* ptr);
+
+        const reflection::icomponent* get_type() const
+        {
+            return &m_reflect;
+        }
     };
 }
 

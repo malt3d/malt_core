@@ -6,6 +6,8 @@ set(CMAKE_CXX_STANDARD 14)
 
 include(Malt)
 
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fno-rtti")
+
 if ("${CMAKE_CXX_COMPILER_ID}" MATCHES "Clang")
     set(CMAKE_SHARED_LIBRARY_CREATE_CXX_FLAGS "${CMAKE_SHARED_LIBRARY_CREATE_CXX_FLAGS} -undefined dynamic_lookup")
 endif()
@@ -39,9 +41,12 @@ set(HEADER_FILES
         ${HEADER_PATH}/component_mgr_impl.hpp
         ${HEADER_PATH}/engine_impl.hpp
         ${HEADER_PATH}/track_ptr.hpp
+        ${HEADER_PATH}/strided_iterator.hpp
+        ${HEADER_PATH}/malt_reflect.hpp
+        ${HEADER_PATH}/malt_reflect_impl.hpp
         )
 
-set(SOURCE_FILES src/component.cpp src/entity.cpp include/malt/strided_iterator.hpp)
+set(SOURCE_FILES src/component.cpp src/entity.cpp)
 
 add_library(malt_core ${MALT_LIB_TYPE} ${SOURCE_FILES})
 malt_def_module(malt_core)
