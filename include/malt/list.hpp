@@ -1,5 +1,6 @@
 #pragma once
 #include <type_traits>
+#include <tuple>
 
 namespace malt
 {
@@ -107,8 +108,8 @@ namespace meta
 
     template <template <typename...> class, typename...> struct convert;
 
-    template <template <typename...> class T, typename... Ts>
-    struct convert <T, list<Ts...>>
+    template <template <class...> class T, template <class...> class U, class... Ts>
+    struct convert<T, U<Ts...>>
     {
         using type = T<Ts...>;
     };
@@ -150,7 +151,7 @@ namespace meta
                 static_cast<front_t<tail>*>(nullptr)
         );
         for_each2(tail{}, f);
-    };
+    }
 
     template <bool, class...> struct filter;
 
@@ -248,4 +249,23 @@ namespace meta
         }
     };
 }
+}
+
+namespace malt
+{
+    namespace meta
+    {
+        template<class TupleT, class FunT, std::size_t... Is>
+        void apply(const TupleT& t, FunT&& f, std::index_sequence<Is...>)
+        {
+            int x[] = {0, (f(std::get<Is>(t)), 0)...};
+            (void) x;
+        }
+
+        template<class TupleT, class FunT>
+        void apply(const TupleT& t, FunT&& f)
+        {
+            apply(t, std::forward<FunT>(f), std::make_index_sequence<std::tuple_size<TupleT>::value>());
+        }
+    }
 }

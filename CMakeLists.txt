@@ -54,5 +54,7 @@ malt_def_module(malt_core)
 set_target_properties(malt_core PROPERTIES CXX_VISIBILITY_PRESET hidden)
 set_target_properties(malt_core PROPERTIES C_VISIBILITY_PRESET hidden)
 
-
 malt_install(malt_core ${HEADER_PATH})
+
+add_executable(core_refl_tests tests/reflection_tests.cpp)
+target_link_libraries(core_refl_tests PUBLIC malt_core)

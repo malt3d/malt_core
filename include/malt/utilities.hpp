@@ -8,6 +8,11 @@
 #include <type_traits>
 #include "component_traits.hpp"
 #include <malt/engine_defs.hpp>
+#include <ostream>
+#include <malt/list.hpp>
+#include <glm/vec2.hpp>
+#include <glm/vec3.hpp>
+#include <sstream>
 
 namespace malt
 {
@@ -76,4 +81,26 @@ namespace malt
         return result;
     }
 
+    template <class ArT, class T>
+    void serialize(ArT&& ar, const T& t)
+    {
+        malt::meta::apply(T::reflect().members, [&](auto& member){
+            std::ostringstream oss;
+            oss << t.*(member.member);
+            ar[member.name] = oss.str();
+        });
+    }
 }
+
+namespace glm
+{
+    inline std::ostream& operator<<(std::ostream& os, const vec3& v)
+    {
+        return os << '(' << v.x << ", " << v.y << ", " << v.z << ')';
+    }
+    inline std::ostream& operator<<(std::ostream& os, const vec2& v)
+    {
+        return os << '(' << v.x << ", " << v.y << ')';
+    }
+}
+
