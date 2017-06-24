@@ -6,7 +6,6 @@
 
 namespace malt
 {
-    template <class T> typename module<T>::component_mgr_tuples module<T>::comp_mgrs;
 }
 
 #define MALT_IMPLEMENT_MODULE(MODULE_DEF_T) \

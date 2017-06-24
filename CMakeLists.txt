@@ -46,7 +46,7 @@ set(HEADER_FILES
         ${HEADER_PATH}/malt_reflect_impl.hpp
         )
 
-set(SOURCE_FILES src/component.cpp src/entity.cpp)
+set(SOURCE_FILES src/component.cpp src/entity.cpp include/malt/detail/entity_info.hpp src/utilities.cpp)
 
 add_library(malt_core ${MALT_LIB_TYPE} ${SOURCE_FILES})
 malt_def_module(malt_core)

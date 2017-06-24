@@ -4,11 +4,13 @@
 
 #pragma once
 
-#include <tuple>
-#include "malt_fwd.hpp"
-#include "list.hpp"
+#include <malt/utilities.hpp>
+#include <malt/malt_fwd.hpp>
+#include <malt/list.hpp>
 #include <malt/entity.hpp>
 #include <unordered_map>
+#include <tuple>
+#include <malt/detail/entity_info.hpp>
 
 namespace malt
 {
@@ -59,10 +61,22 @@ namespace malt
     {
         using module_ts = typename GameConfig::modules;
         using comp_ts = meta::merge_t<meta::map_t<get_comps, module_ts>>;
+        using mgr_ts = meta::map_t<meta::mapper<malt::component_mgr>, comp_ts>;
+        using mgr_tuple_t = meta::convert_t<std::tuple, mgr_ts>;
 
-        std::unordered_map<comp_t_id, std::function<malt::component*(entity_id)>> erased_adders;
+        static constexpr auto component_count = meta::length_t(comp_ts{});
 
-        entity_id next = 1;
+        std::unordered_map<int, comp_t_id> m_hash_to_index;
+        std::vector<std::function<malt::component*(entity_id)>> m_erased_adders;
+        std::vector<std::function<malt::component*(entity_id)>> m_erased_getters;
+
+        mgr_tuple_t m_comp_managers;
+
+        /*!
+         * This field stores the id of the entity that will be created next
+         */
+        entity_id m_next_id = 1;
+        detail::entity_manager<component_count> m_entity_manager;
     public:
 
         game();
@@ -70,7 +84,27 @@ namespace malt
 
         malt::component* erased_add_component(comp_t_id c, entity_id e)
         {
-            return erased_adders[c](e);
+            at_exit([this, e, c] {
+                m_entity_manager.add_component(e, c);
+            });
+            return m_erased_adders[c](e);
+        }
+
+        malt::component* hash_add_component(size_t c_hash, entity_id e)
+        {
+            comp_t_id c = m_hash_to_index[c_hash];
+            return erased_add_component(c, e);
+        }
+
+        malt::component* erased_get_component(comp_t_id c, entity_id e)
+        {
+            return m_erased_getters[c](e);
+        }
+
+        malt::component* hash_get_component(size_t c_hash, entity_id e)
+        {
+            auto c = m_hash_to_index[c_hash];
+            return erased_get_component(c, e);
         }
 
         template <class MsgT, class... Args>
@@ -87,14 +121,43 @@ namespace malt
         void destroy_comp(CompT* c)
         {
             if (!c) return;
+            entity e = c->get_entity();
+            m_entity_manager.remove_component(e.id, meta::index_of_t<CompT, comp_ts>());
             get_mgr(meta::type<CompT>{}).remove_component(c);
+        }
+
+        template <class CompT>
+        void notify_add_comp(entity_id ent)
+        {
+            m_entity_manager.add_component(ent, meta::index_of_t<CompT, comp_ts>());
+        }
+
+        void destroy_entity(entity e)
+        {
+            at_exit([this, e]{
+                m_entity_manager.remove_entity(e.id);
+            });
+
+            /*
+             * loop over all components and destroy them
+             */
+        }
+
+        auto get_component_map(entity id)
+        {
+            return m_entity_manager.get_details(id.id).components;
+        }
+
+        static constexpr auto get_component_type_count()
+        {
+            return component_count;
         }
 
         template <class CompT>
         component_mgr<CompT>& get_mgr(meta::type<CompT>)
         {
-            using mapped = meta::filter_t<has_component<CompT>, module_ts>;
-            return meta::front_t<mapped>:: template get_mgr<CompT>();
+            constexpr auto index = meta::index_of_t<CompT, comp_ts>();
+            return std::get<index>(m_comp_managers);
         }
 
         template <class T>

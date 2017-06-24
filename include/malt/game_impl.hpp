@@ -5,6 +5,7 @@
 #include <malt/game.hpp>
 #include <iostream>
 #include <boost/type_index.hpp>
+#include <malt/component_mgr_impl.hpp>
 
 namespace malt
 {
@@ -12,14 +13,9 @@ namespace malt
     template <class MsgT, class... Args>
     void game<T>::deliver(entity_id id, MsgT, const Args& ... args)
     {
-        meta::for_each(module_ts{}, [id, &args...](auto* module)
-        {
-            using module_t = std::remove_pointer_t<decltype(module)>;
-            meta::for_each(typename module_t::component_ts{}, [id, &args...](auto* comp)
-            {
-                using comp_t = std::remove_pointer_t<decltype(comp)>;
-                module_t:: template get_mgr<comp_t>().deliver(id, MsgT{}, args...);
-            });
+        meta::for_each(comp_ts{}, [this, id, &args...](auto* c){
+            using comp_t = std::remove_pointer_t<decltype(c)>;
+            this->get_mgr(meta::type<comp_t>{}).deliver(id, MsgT{}, args...);
         });
     }
 
@@ -27,21 +23,18 @@ namespace malt
     template<class MsgT, class... Args>
     void game<T>::broadcast(MsgT, const Args& ... args)
     {
-        meta::for_each(module_ts{}, [&args...](auto* module)
-        {
-            using module_t = std::remove_pointer_t<decltype(module)>;
-            meta::for_each(typename module_t::component_ts{}, [&args...](auto* comp)
-            {
-                using comp_t = std::remove_pointer_t<decltype(comp)>;
-                module_t:: template get_mgr<comp_t>().broadcast(MsgT{}, args...);
-            });
+        meta::for_each(comp_ts{}, [this, &args...](auto* c){
+            using comp_t = std::remove_pointer_t<decltype(c)>;
+            this->get_mgr(meta::type<comp_t>{}).broadcast(MsgT{}, args...);
         });
     }
 
     template <class T>
     entity game<T>::create_entity()
     {
-        return entity(next++);
+        auto id = m_next_id++;
+        m_entity_manager.add_entity(id, "new object");
+        return entity(id);
     }
 
     entity create_entity()
@@ -49,17 +42,17 @@ namespace malt
         return impl::create_entity();
     }
 
+    void destroy(entity e)
+    {
+        impl::destroy(e);
+    }
+
+
     template <class T>
     void game<T>::synchronize()
-    {
-        meta::for_each(module_ts{}, [this](auto* module)
-        {
-            using module_t = std::remove_pointer_t<decltype(module)>;
-            meta::for_each(typename module_t::component_ts{}, [&](auto* comp)
-            {
-                using comp_t = std::remove_pointer_t<decltype(comp)>;
-                this->get_mgr(meta::type<comp_t>{}).synchronize();
-            });
+    {   meta::for_each(comp_ts{}, [this](auto* c){
+            using comp_t = std::remove_pointer_t<decltype(c)>;
+            this->get_mgr(meta::type<comp_t>{}).synchronize();
         });
     }
 
@@ -123,14 +116,25 @@ namespace malt
     template <class GameT>
     game<GameT>::game()
     {
+        m_erased_getters.reserve(component_count);
+        m_erased_adders.reserve(component_count);
         meta::for_each(comp_ts{}, [this](auto*c)
         {
             using type1 = std::remove_pointer_t<decltype(c)>;
-            auto name = component_name<type1>::name;
-            erased_adders[hash_c_string(name, strlen(name))] = [&](entity_id id) -> malt::component*
+            static constexpr auto index = meta::index_of_t<type1, comp_ts>();
+            auto name = type1::reflect().name;
+
+            m_hash_to_index[hash_c_string(name, strlen(name))] = index;
+
+            m_erased_adders.emplace_back([&](entity_id id) -> malt::component*
             {
                 return this->get_mgr(meta::type<type1>()).add_component(id);
-            };
+            });
+
+            m_erased_getters.emplace_back([&](entity_id id) -> malt::component*
+            {
+                return this->get_mgr(meta::type<type1>()).get_component(id);
+            });
 
             using derived_from_T = meta::filter_t<is_derived_from<type1, false>, comp_ts>;
             auto type = static_cast<const reflection::component_type<type1>*>(this->get_mgr(meta::type<type1>()).get_type());

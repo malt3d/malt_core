@@ -8,9 +8,11 @@
 #include <malt/malt_fwd.hpp>
 #include <malt/list.hpp>
 #include <malt/component_traits.hpp>
+#include <yaml-cpp/yaml.h>
 
 namespace malt {
     namespace reflection {
+
         class icomponent;
 
         struct icomponent_range
@@ -24,19 +26,17 @@ namespace malt {
             { return m_end; }
         };
 
+        using serialize_fun = void (*) (YAML::Node&&, component*);
+
         class icomponent
         {
         public:
             virtual const char* get_name() const = 0;
-
             virtual size_t get_type_hash() const = 0;
-
             virtual module_id get_module_id() const = 0;
-
             virtual malt::component* add_component(entity_id id) const = 0;
-
             virtual icomponent_range get_base_components() const = 0;
-
+            virtual serialize_fun get_serialize_function() const = 0;
             virtual ~icomponent() = default;
         };
     }
@@ -44,6 +44,18 @@ namespace malt {
 
 namespace malt {
     namespace reflection {
+
+        struct nullmem{};
+
+        struct not_nullmem
+        {
+            template <class T>
+            static constexpr bool value()
+            {
+                return !std::is_same<T, nullmem>{};
+            }
+        };
+
         template<class>
         struct member_var_traits;
         template<class>
@@ -59,7 +71,9 @@ namespace malt {
         template<class RetT, class TypeT, class... Args>
         struct member_fun_traits<RetT (TypeT::*)(Args...)>
         {
-            using type_t = TypeT;
+            using return_type = RetT;
+            using reflected_type = TypeT;
+            using arg_types = meta::list<Args...>;
         };
 
         template<class refl_type, class member_type>
@@ -79,23 +93,39 @@ namespace malt {
             tuple_t members;
         };
 
-        template<class T>
-        constexpr auto member(const char* name, T t)
+        /*template <class T, class TypeT, class... Args>
+        constexpr auto member(const char* name, T (TypeT::* x)(Args...))
         {
-            using traits = member_var_traits<T>;
+            using traits = member_fun_traits<decltype(x)>;
+        };*/
+
+        template<class T, class TypeT>
+        constexpr auto member(const char* name, T TypeT::* t)
+        {
+            using traits = member_var_traits<decltype(t)>;
             return member_var_info<typename traits::reflected_type, typename traits::variable_type>{name, t};
         }
 
-        template<class... Members>
-        constexpr auto type(const char* name, Members... mems)
+        constexpr auto type(const char* name, nullmem)
         {
-            return type_info<Members...>{name, std::tuple<Members...>{ mems... }};
+            using t = type_info<>;
+            return t{name, typename t::tuple_t{}};
+        }
+
+        template<class... members>
+        constexpr auto type(const char* name, members... mems)
+        {
+            using t = type_info<members...>;
+            return t{name, typename t::tuple_t{ mems... }};
         }
     }
 }
 
+
 #define MEM(var) \
     malt::reflection::member(#var, &refl_self_type::var)
+
+#define NOMEM malt::reflection::nullmem {}
 
 #define REFLECT(TYPE, ...) \
     using refl_self_type = TYPE;\

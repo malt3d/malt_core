@@ -17,7 +17,8 @@ namespace malt
         template <class CompT>
         struct component_adapter
         {
-            static component_mgr<CompT>& get_mgr() MALT_WEAK_SYMBOL;
+            static CompT* add_component(entity_id);
+            static CompT* get_component(entity_id);
             static void destroy(CompT*) MALT_WEAK_SYMBOL;
             static erased_range<CompT, component> get_components() MALT_WEAK_SYMBOL;
         };
@@ -31,6 +32,8 @@ namespace malt
             static void broadcast(MsgT, const Args&... args) MALT_WEAK_SYMBOL;
         };
 
+        void destroy(entity) MALT_WEAK_SYMBOL;
+
         entity create_entity() MALT_WEAK_SYMBOL;
 
         void post_frame() MALT_WEAK_SYMBOL;
@@ -38,7 +41,9 @@ namespace malt
         bool is_terminated() MALT_WEAK_SYMBOL;
         float get_delta_time() MALT_WEAK_SYMBOL;
 
-        malt::component* add_component(const comp_t_id& comp_type, entity_id) MALT_WEAK_SYMBOL;
+        malt::component* add_component(size_t comp_hash, entity_id) MALT_WEAK_SYMBOL;
+
+        std::vector<malt::component*> components_of(entity) MALT_WEAK_SYMBOL;
     }
 
     /*
@@ -68,6 +73,12 @@ namespace malt
     entity create_entity();
 
     /*
+     * Destroys the given entity
+     *
+     */
+    void destroy(entity e);
+
+    /*
      * Destroys the given component
      */
     template <class CompT>
@@ -88,7 +99,7 @@ namespace malt
      * Adds a component using the hash of the component type
      * This is useful for loading scenes from files
      */
-    malt::component* add_component(const comp_t_id& c_id, entity_id e_id) MALT_PUBLIC;
+    malt::component* add_component(size_t c_id, entity_id e_id) MALT_PUBLIC;
 
     /*
      * Adds a component using the name of the component type

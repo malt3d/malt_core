@@ -1,6 +1,8 @@
-//g
+//
 // Created by fatih on 4/27/17.
 //
+
+#pragma once
 
 #include <malt/component.hpp>
 #include <malt/component_mgr.hpp>
@@ -120,7 +122,4 @@ namespace malt
     component_mgr<CompT>::~component_mgr() = default;
 }
 
-#define MALT_IMPLEMENT_COMP(COMPT) \
-    template class malt::component_mgr<COMPT>; \
-    template<> const char* malt::component_name<COMPT>::name = #COMPT; \
-    template<> size_t malt::component_name<COMPT>::hash = hash_c_string(#COMPT, strlen(#COMPT));
+#define MALT_IMPLEMENT_COMP(COMPT)

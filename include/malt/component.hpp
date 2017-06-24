@@ -43,6 +43,8 @@ namespace malt
         CompT* get_component() {
             return m_e.get_component<CompT>();
         }
+
+        REFLECT(component, MEM(m_enabled));
     };
 }
 

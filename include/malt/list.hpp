@@ -224,7 +224,7 @@ namespace meta
     };
 
     template <class... Ts>
-    constexpr int length_t()
+    constexpr int length_t(list<Ts...>)
     {
         return length<list<Ts...>>::value;
     }
