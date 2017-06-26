@@ -35,6 +35,9 @@ namespace malt {
 
         template<class MsgT, class... ArgTs>
         void deliver_message(MsgT, const ArgTs& ... args);
+
+        void set_name(std::string name);
+        const std::string& get_name() const;
     };
 }
 
@@ -57,5 +60,18 @@ namespace malt{
     void entity::deliver_message(MsgT, const ArgTs& ... args)
     {
         impl::msg_delivery<MsgT(ArgTs...)>::deliver(id, MsgT{}, args...);
+    }
+
+    inline
+    void entity::set_name(std::string name)
+    {
+        impl::set_name(id, std::move(name));
+    }
+
+    inline
+    const std::string&
+    entity::get_name() const
+    {
+        return impl::get_name(id);
     }
 }

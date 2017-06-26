@@ -44,7 +44,6 @@ namespace malt {
 
 namespace malt {
     namespace reflection {
-
         struct nullmem{};
 
         struct not_nullmem
@@ -121,14 +120,19 @@ namespace malt {
     }
 }
 
-
 #define MEM(var) \
     malt::reflection::member(#var, &refl_self_type::var)
 
 #define NOMEM malt::reflection::nullmem {}
 
 #define REFLECT(TYPE, ...) \
-    using refl_self_type = TYPE;\
     static constexpr auto reflect() { \
+        using refl_self_type = TYPE;\
+        return malt::reflection::type(#TYPE, __VA_ARGS__); \
+    }
+
+#define PUBLIC_REFLECT(TYPE, ...) \
+    inline constexpr auto static_reflect(malt::meta::type<TYPE>) { \
+        using refl_self_type = TYPE;\
         return malt::reflection::type(#TYPE, __VA_ARGS__); \
     }

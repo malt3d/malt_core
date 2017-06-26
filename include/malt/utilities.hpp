@@ -6,19 +6,9 @@
 
 #include <malt/malt_fwd.hpp>
 #include <type_traits>
-#include "component_traits.hpp"
+#include <malt/component_traits.hpp>
+#include <iterator>
 #include <malt/engine_defs.hpp>
-#include <ostream>
-#include <malt/list.hpp>
-#include <glm/vec2.hpp>
-#include <glm/vec3.hpp>
-#include <glm/gtc/quaternion.hpp>
-#include <sstream>
-
-namespace YAML
-{
-    class Node;
-}
 
 namespace malt
 {
@@ -86,35 +76,4 @@ namespace malt
         }
         return result;
     }
-
-    void serialize(YAML::Node&& ar, entity e) MALT_PUBLIC;
-    void serialize(YAML::Node& ar, entity e) MALT_PUBLIC;
-
-    template <class ArT, class T>
-    void serialize(ArT&& ar, const T& t)
-    {
-        const component* c = &t; // invoke sfinae
-        malt::meta::apply(T::reflect().members, [&](auto& member){
-            std::ostringstream oss;
-            oss << t.*(member.member);
-            ar[member.name] = oss.str();
-        });
-    }
 }
-
-namespace glm
-{
-    inline std::ostream& operator<<(std::ostream& os, const vec3& v)
-    {
-        return os << '(' << v.x << ", " << v.y << ", " << v.z << ')';
-    }
-    inline std::ostream& operator<<(std::ostream& os, const vec2& v)
-    {
-        return os << '(' << v.x << ", " << v.y << ')';
-    }
-    inline std::ostream& operator<<(std::ostream& os, const quat& q)
-    {
-        return os << '(' << q.w << ", " << q.x << ", " << q.y << ", " << q.z << ')';
-    }
-}
-

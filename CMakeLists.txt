@@ -44,6 +44,7 @@ set(HEADER_FILES
         ${HEADER_PATH}/strided_iterator.hpp
         ${HEADER_PATH}/malt_reflect.hpp
         ${HEADER_PATH}/malt_reflect_impl.hpp
+        ${HEADER_PATH}/serialization.hpp
         )
 
 set(SOURCE_FILES src/component.cpp src/entity.cpp include/malt/detail/entity_info.hpp src/utilities.cpp)

@@ -7,6 +7,7 @@
 #include <malt/entity.hpp>
 #include <yaml-cpp/yaml.h>
 #include <malt/malt_reflect.hpp>
+#include <malt/serialization.hpp>
 
 namespace malt
 {

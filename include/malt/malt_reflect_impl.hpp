@@ -3,6 +3,7 @@
 //
 
 #include <malt/engine.hpp>
+#include <malt/serialization.hpp>
 #include <cstring>
 
 namespace malt

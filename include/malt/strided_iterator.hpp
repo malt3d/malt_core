@@ -74,7 +74,9 @@ namespace malt {
     template<class ExternalT, class InternalT>
     class stride_iterator : public std::iterator<std::forward_iterator_tag, InternalT>
     {
-        static_assert(std::is_base_of<InternalT, ExternalT>{}, "Internal type must be the base of External type");
+        static_assert(
+                std::is_base_of<InternalT, ExternalT>{} || std::is_same<InternalT, ExternalT>{}
+                , "Internal type must be the base of External type");
         const erased_container<InternalT>* m_current;
         InternalT* m_pos;
 
@@ -136,6 +138,18 @@ namespace malt {
         Base* end = &vec.back() + 1;
         return erased_container<Base>{first, end, sizeof(T)};
     }
+
+    template <class Base, class T>
+    erased_container<Base> get_container(std::vector<T>& vec, Base T::* mem_ptr)
+    {
+        if (vec.empty())
+        {
+            return {nullptr, nullptr, sizeof(T)};
+        }
+        Base* first = &(vec.front().*(mem_ptr));
+        Base* end = reinterpret_cast<Base*>(reinterpret_cast<char*>(&(vec.back().*(mem_ptr))) + sizeof(T));
+        return erased_container<Base>{first, end, sizeof(T)};
+    };
 
     template<class T>
     struct erased_containers

@@ -44,6 +44,11 @@ namespace malt
         malt::component* add_component(size_t comp_hash, entity_id) MALT_WEAK_SYMBOL;
 
         std::vector<malt::component*> components_of(entity) MALT_WEAK_SYMBOL;
+
+        erased_range<entity_id, entity_id> get_entities() MALT_WEAK_SYMBOL;
+
+        const std::string& get_name(entity_id) MALT_WEAK_SYMBOL;
+        void set_name(entity_id, std::string) MALT_WEAK_SYMBOL;
     }
 
     /*
@@ -108,7 +113,7 @@ namespace malt
     malt::component* add_component(const char* comp_type_name, entity_id e_id) MALT_PUBLIC;
 
     /*
-     * Gets runtime reflection information from a component
+     * Extracts runtime reflection information from a component
      */
     const reflection::icomponent* reflect(component* c) MALT_PUBLIC;
 

@@ -33,7 +33,7 @@ namespace malt
     entity game<T>::create_entity()
     {
         auto id = m_next_id++;
-        m_entity_manager.add_entity(id, "new object");
+        m_entity_manager.add_entity(id, "Unnamed entity");
         return entity(id);
     }
 
@@ -103,6 +103,13 @@ namespace malt
 
         return erased_range<T, component>{std::get<0>(erased_storage).m_begin_container};
     }
+
+    template <class GameT>
+    erased_range<entity_id, entity_id>
+    game<GameT>::get_entities()
+    {
+        return m_entity_manager.get_entities();
+    };
 
     template <class GameT>
     void game<GameT>::diagnostics()

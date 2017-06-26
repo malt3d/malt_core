@@ -82,6 +82,16 @@ namespace malt
         game();
         void diagnostics();
 
+        void set_name(entity_id id, std::string name)
+        {
+            m_entity_manager.set_name(id, std::move(name));
+        }
+
+        const std::string& get_name(entity_id id)
+        {
+            return m_entity_manager.get_name(id);
+        }
+
         malt::component* erased_add_component(comp_t_id c, entity_id e)
         {
             at_exit([this, e, c] {
@@ -145,7 +155,7 @@ namespace malt
 
         auto get_component_map(entity id)
         {
-            return m_entity_manager.get_details(id.id).components;
+            return m_entity_manager.get_components(id.id);
         }
 
         static constexpr auto get_component_type_count()
@@ -162,6 +172,8 @@ namespace malt
 
         template <class T>
         erased_range<T, component> get_components(meta::type<T>);
+
+        erased_range<entity_id, entity_id> get_entities();
     };
 
 }
