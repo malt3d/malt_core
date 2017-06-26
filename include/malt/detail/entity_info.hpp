@@ -8,6 +8,7 @@
 #include <bitset>
 #include <stdexcept>
 #include <algorithm>
+#include <malt/strided_iterator.hpp>
 
 namespace malt
 {

@@ -2,7 +2,7 @@
 // Created by fatih on 6/2/17.
 //
 
-#include <malt/engine.hpp>
+#include <malt/entity.hpp>
 #include <malt/serialization.hpp>
 #include <cstring>
 
@@ -14,11 +14,22 @@ namespace malt
         class component_type : public icomponent
         {
             mutable std::vector<const icomponent*> m_bases;
+            comp_t_id m_component_index;
 
         public:
+            void set_index(comp_t_id id)
+            {
+                m_component_index = id;
+            }
+
+            comp_t_id get_index() const override
+            {
+                return m_component_index;
+            }
+
             const char* get_name() const override
             {
-                return comp_t::reflect().name;
+                return static_reflect(meta::type<comp_t>{}).name;
             }
 
             size_t get_type_hash() const override
@@ -31,7 +42,7 @@ namespace malt
                 throw std::runtime_error("not implemented yet");
             }
 
-            component* add_component(entity_id id) const override
+            component* add_component(entity id) const override
             {
                 return malt::add_component(get_type_hash(), id);
             }
@@ -39,6 +50,11 @@ namespace malt
             serialize_fun get_serialize_function() const override
             {
                 return [](YAML::Node&& ar, component* c) {serialize(ar, *static_cast<comp_t*>(c));};
+            }
+
+            deserialize_fun get_deserialize_function() const override
+            {
+                return [](YAML::Node&& ar, component* c) {deserialize(ar, *static_cast<comp_t*>(c));};
             }
 
             icomponent_range get_base_components() const override

@@ -5,7 +5,7 @@
 #pragma once
 
 #include <malt/malt_fwd.hpp>
-#include <malt/component_mgr.hpp>
+#include <malt/utilities.hpp>
 
 namespace malt {
     class entity

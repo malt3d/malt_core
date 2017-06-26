@@ -4,8 +4,7 @@
 
 #pragma once
 
-#include <malt/list.hpp>
-#include <malt/component_mgr.hpp>
+#include <malt/meta.hpp>
 #include <malt/component.hpp>
 #include <tuple>
 
@@ -26,3 +25,5 @@ namespace malt
     };
 }
 
+#define MALT_IMPLEMENT_MODULE(MODULE_DEF_T) \
+    template class malt::module<MODULE_DEF_T>;

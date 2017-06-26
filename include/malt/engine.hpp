@@ -41,7 +41,7 @@ namespace malt
         bool is_terminated() MALT_WEAK_SYMBOL;
         float get_delta_time() MALT_WEAK_SYMBOL;
 
-        malt::component* add_component(size_t comp_hash, entity_id) MALT_WEAK_SYMBOL;
+        malt::component* add_component(size_t comp_hash, entity) MALT_WEAK_SYMBOL;
 
         std::vector<malt::component*> components_of(entity) MALT_WEAK_SYMBOL;
 
@@ -78,6 +78,11 @@ namespace malt
     entity create_entity();
 
     /*
+     * Creates a new entity and sets the name of it
+     */
+    entity create_entity(std::string name);
+
+    /*
      * Destroys the given entity
      *
      */
@@ -104,18 +109,18 @@ namespace malt
      * Adds a component using the hash of the component type
      * This is useful for loading scenes from files
      */
-    malt::component* add_component(size_t c_id, entity_id e_id) MALT_PUBLIC;
+    malt::component* add_component(size_t c_id, entity e) MALT_PUBLIC;
 
     /*
      * Adds a component using the name of the component type
      * This is useful for loading scenes from files
      */
-    malt::component* add_component(const char* comp_type_name, entity_id e_id) MALT_PUBLIC;
+    malt::component* add_component(const char* comp_type_name, entity e) MALT_PUBLIC;
 
     /*
      * Extracts runtime reflection information from a component
      */
-    const reflection::icomponent* reflect(component* c) MALT_PUBLIC;
+    const reflection::icomponent* dynamic_reflect(component* c) MALT_PUBLIC;
 
     namespace time
     {

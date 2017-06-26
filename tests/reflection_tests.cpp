@@ -17,7 +17,7 @@ struct foo
 
 TEST_CASE("static reflection test", "[malt_core]")
 {
-    auto res = foo::reflect();
+    auto res = static_reflect(malt::meta::type<foo>{});
     REQUIRE(std::string(res.name) == "foo");
 
     foo v;

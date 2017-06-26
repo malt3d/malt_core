@@ -6,7 +6,7 @@
 
 #include <malt/utilities.hpp>
 #include <malt/malt_fwd.hpp>
-#include <malt/list.hpp>
+#include <malt/meta.hpp>
 #include <malt/entity.hpp>
 #include <unordered_map>
 #include <tuple>
@@ -69,6 +69,7 @@ namespace malt
         std::unordered_map<int, comp_t_id> m_hash_to_index;
         std::vector<std::function<malt::component*(entity_id)>> m_erased_adders;
         std::vector<std::function<malt::component*(entity_id)>> m_erased_getters;
+        std::vector<std::function<void(entity_id)>> m_erased_destroyers;
 
         mgr_tuple_t m_comp_managers;
 
@@ -109,6 +110,11 @@ namespace malt
         malt::component* erased_get_component(comp_t_id c, entity_id e)
         {
             return m_erased_getters[c](e);
+        }
+
+        void erased_destory_component(comp_t_id c, entity_id e)
+        {
+            m_erased_destroyers[c](e);
         }
 
         malt::component* hash_get_component(size_t c_hash, entity_id e)

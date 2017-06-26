@@ -10,7 +10,7 @@
 #include <vector>
 #include <malt/utilities.hpp>
 #include <malt/strided_iterator.hpp>
-#include <malt/malt_reflect_impl.hpp>
+#include <malt/detail/malt_reflect_impl.hpp>
 
 namespace malt
 {
@@ -71,9 +71,9 @@ namespace malt
         void synchronize();
 
     public:
-        component_mgr();
+        component_mgr(comp_t_id);
         component_mgr(const component_mgr&) = delete;
-        component_mgr(component_mgr&&) = delete;
+        component_mgr(component_mgr&&) = default;
         ~component_mgr();
         CompT* get_component(entity_id id);
         CompT* add_component(entity_id id);

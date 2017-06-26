@@ -2,10 +2,10 @@
 // Created by Mehmet Fatih BAKIR on 27/04/2017.
 //
 
-#include <malt/game.hpp>
+#include <malt/detail/game.hpp>
 #include <iostream>
 #include <boost/type_index.hpp>
-#include <malt/component_mgr_impl.hpp>
+#include <malt/detail/component_mgr_impl.hpp>
 
 namespace malt
 {
@@ -40,6 +40,13 @@ namespace malt
     entity create_entity()
     {
         return impl::create_entity();
+    }
+
+    entity create_entity(std::string name)
+    {
+        auto&& e = create_entity();
+        e.set_name(name);
+        return e;
     }
 
     void destroy(entity e)
@@ -120,8 +127,15 @@ namespace malt
         });
     }
 
+    template <class... ElemTs, size_t... Indices>
+    auto init_mgrs(meta::list<ElemTs...>, std::index_sequence<Indices...>)
+    {
+        return std::make_tuple(ElemTs(Indices)...);
+    };
+
     template <class GameT>
-    game<GameT>::game()
+    game<GameT>::game() :
+        m_comp_managers(init_mgrs(mgr_ts{}, std::make_index_sequence<component_count>()))
     {
         m_erased_getters.reserve(component_count);
         m_erased_adders.reserve(component_count);
@@ -129,7 +143,7 @@ namespace malt
         {
             using type1 = std::remove_pointer_t<decltype(c)>;
             static constexpr auto index = meta::index_of_t<type1, comp_ts>();
-            auto name = type1::reflect().name;
+            auto name = static_reflect(meta::type<type1>{}).name;
 
             m_hash_to_index[hash_c_string(name, strlen(name))] = index;
 
@@ -141,6 +155,12 @@ namespace malt
             m_erased_getters.emplace_back([&](entity_id id) -> malt::component*
             {
                 return this->get_mgr(meta::type<type1>()).get_component(id);
+            });
+
+            m_erased_destroyers.emplace_back([&](entity_id id) -> void
+            {
+                auto comp = get_mgr(meta::type<type1>{}).get_component(id);
+                this->destroy_comp(comp);
             });
 
             using derived_from_T = meta::filter_t<is_derived_from<type1, false>, comp_ts>;

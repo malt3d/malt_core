@@ -32,22 +32,24 @@ set(HEADER_FILES
         ${HEADER_PATH}/module.hpp
         ${HEADER_PATH}/malt_fwd.hpp
         ${HEADER_PATH}/game.hpp
-        ${HEADER_PATH}/list.hpp
+        ${HEADER_PATH}/meta.hpp
         ${HEADER_PATH}/engine.hpp
         ${HEADER_PATH}/message.hpp
         ${HEADER_PATH}/utilities.hpp
-        ${HEADER_PATH}/game_impl.hpp
+        ${HEADER_PATH}/detail/game_impl.hpp
         ${HEADER_PATH}/module_impl.hpp
-        ${HEADER_PATH}/component_mgr_impl.hpp
         ${HEADER_PATH}/engine_impl.hpp
         ${HEADER_PATH}/track_ptr.hpp
         ${HEADER_PATH}/strided_iterator.hpp
         ${HEADER_PATH}/malt_reflect.hpp
-        ${HEADER_PATH}/malt_reflect_impl.hpp
         ${HEADER_PATH}/serialization.hpp
+
+        ${HEADER_PATH}/detail/malt_reflect_impl.hpp
+        ${HEADER_PATH}/detail/entity_info.hpp
+        ${HEADER_PATH}/detail/component_mgr_impl.hpp
         )
 
-set(SOURCE_FILES src/component.cpp src/entity.cpp include/malt/detail/entity_info.hpp src/utilities.cpp)
+set(SOURCE_FILES src/component.cpp src/entity.cpp src/utilities.cpp)
 
 add_library(malt_core ${MALT_LIB_TYPE} ${SOURCE_FILES})
 malt_def_module(malt_core)

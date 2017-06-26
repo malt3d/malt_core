@@ -5,7 +5,7 @@
 #pragma once
 
 #include <malt/component.hpp>
-#include <malt/component_mgr.hpp>
+#include <malt/detail/component_mgr.hpp>
 #include <vector>
 #include <algorithm>
 #include <malt/entity.hpp>
@@ -16,9 +16,10 @@
 namespace malt
 {
     template <class CompT>
-    component_mgr<CompT>::component_mgr()
+    component_mgr<CompT>::component_mgr(comp_t_id id)
     {
         aside.reserve(64);
+        m_reflect.set_index(id);
     }
 
     template <class CompT>

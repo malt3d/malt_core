@@ -25,7 +25,7 @@ namespace malt
         template <class T>
         friend class component_mgr;
 
-        friend const reflection::icomponent* reflect(component*);
+        friend const reflection::icomponent* dynamic_reflect(component*);
 
     public:
         component() = default;

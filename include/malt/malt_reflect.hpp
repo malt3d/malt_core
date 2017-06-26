@@ -6,7 +6,7 @@
 
 #include <cstddef>
 #include <malt/malt_fwd.hpp>
-#include <malt/list.hpp>
+#include <malt/meta.hpp>
 #include <malt/component_traits.hpp>
 #include <yaml-cpp/yaml.h>
 
@@ -27,16 +27,19 @@ namespace malt {
         };
 
         using serialize_fun = void (*) (YAML::Node&&, component*);
+        using deserialize_fun = void (*) (YAML::Node&&, component*);
 
         class icomponent
         {
         public:
             virtual const char* get_name() const = 0;
+            virtual comp_t_id get_index() const = 0;
             virtual size_t get_type_hash() const = 0;
             virtual module_id get_module_id() const = 0;
-            virtual malt::component* add_component(entity_id id) const = 0;
+            virtual malt::component* add_component(entity id) const = 0;
             virtual icomponent_range get_base_components() const = 0;
             virtual serialize_fun get_serialize_function() const = 0;
+            virtual deserialize_fun get_deserialize_function() const = 0;
             virtual ~icomponent() = default;
         };
     }
@@ -92,12 +95,6 @@ namespace malt {
             tuple_t members;
         };
 
-        /*template <class T, class TypeT, class... Args>
-        constexpr auto member(const char* name, T (TypeT::* x)(Args...))
-        {
-            using traits = member_fun_traits<decltype(x)>;
-        };*/
-
         template<class T, class TypeT>
         constexpr auto member(const char* name, T TypeT::* t)
         {
@@ -126,7 +123,7 @@ namespace malt {
 #define NOMEM malt::reflection::nullmem {}
 
 #define REFLECT(TYPE, ...) \
-    static constexpr auto reflect() { \
+    static constexpr auto static_reflect() { \
         using refl_self_type = TYPE;\
         return malt::reflection::type(#TYPE, __VA_ARGS__); \
     }
@@ -136,3 +133,9 @@ namespace malt {
         using refl_self_type = TYPE;\
         return malt::reflection::type(#TYPE, __VA_ARGS__); \
     }
+
+template <class T>
+constexpr auto static_reflect(malt::meta::type<T>)
+{
+    return T::static_reflect();
+}
