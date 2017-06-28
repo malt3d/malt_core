@@ -19,8 +19,7 @@ namespace malt
      *
      * Although it should be used as a base class for every
      * component type in malt, this class is not designed to
-     * be used as a base class for polymorphic class hierarchies;
-     * thus the non-virtual protected destructor
+     * be used as a base class for polymorphic class hierarchies
      */
     class MALT_PUBLIC component
             : public tracked
@@ -34,9 +33,6 @@ namespace malt
         template <class T>
         friend class component_mgr;
         friend const reflection::icomponent* dynamic_reflect(component*);
-
-    protected:
-        ~component() = default;
 
     public:
         component() = default;
