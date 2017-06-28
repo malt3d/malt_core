@@ -57,12 +57,18 @@ namespace malt
     void deserialize(ArT&& ar, track_ptr<CompT>& ptr)
     {
         entity_id id = ar["entity_id"]. template as<entity_id>();
-        std::string c_name = ar["comp_name"]. template as<std::string();
+        std::string c_name = ar["comp_name"]. template as<std::string>();
 
         entity e (id);
-        auto c = malt::add_component(c_name.c_str(), e);
+        auto c = malt::get_component(c_name.c_str(), e);
 
-        throw std::runtime_error("it's not implemented yet :(");
+        if (!c)
+        {
+            c = malt::add_component(c_name.c_str(), e);
+        }
+
+        auto p = get_ptr(*c);
+        ptr = pointer_cast<CompT>(p);
     }
 
     template <class ArT, class T>

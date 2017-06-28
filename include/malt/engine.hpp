@@ -42,6 +42,7 @@ namespace malt
         float get_delta_time() MALT_WEAK_SYMBOL;
 
         malt::component* add_component(size_t comp_hash, entity) MALT_WEAK_SYMBOL;
+        malt::component* get_component(size_t comp_hash, entity) MALT_WEAK_SYMBOL;
 
         std::vector<malt::component*> components_of(entity) MALT_WEAK_SYMBOL;
 
@@ -116,6 +117,16 @@ namespace malt
      * This is useful for loading scenes from files
      */
     malt::component* add_component(const char* comp_type_name, entity e) MALT_PUBLIC;
+
+    /*
+     * Gets a component using the hash of the component type
+     */
+    malt::component* get_component(size_t c_id, entity e) MALT_PUBLIC;
+
+    /*
+     * Gets a component using the name of the component type
+     */
+    malt::component* get_component(const char* comp_type_name, entity e) MALT_PUBLIC;
 
     /*
      * Extracts runtime reflection information from a component
