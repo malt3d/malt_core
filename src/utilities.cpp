@@ -34,7 +34,11 @@ namespace malt
         {
             auto name = comp.first.as<std::string>();
             YAML::Node val = comp.second;
-            component* c = malt::add_component(name.c_str(), e);
+            component* c = malt::get_component(name.c_str(), e);
+            if (!c)
+            {
+                c = malt::add_component(name.c_str(), e);
+            }
             auto&& refl = dynamic_reflect(c);
             refl->get_deserialize_function()(std::move(val), c);
         }
