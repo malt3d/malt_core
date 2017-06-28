@@ -44,6 +44,7 @@ namespace malt
     template <class ArT, class CompT>
     void serialize(ArT&& ar, const track_ptr<CompT>& ptr)
     {
+        component* c = ptr.get(); // invoke sfinae
         ar["entity_id"] = ptr ?
                           detail::get_id(ptr->get_entity()) :
                           0;    // if the pointer is null, set id of entity to 0
@@ -55,6 +56,12 @@ namespace malt
     template <class ArT, class CompT>
     void deserialize(ArT&& ar, track_ptr<CompT>& ptr)
     {
+        entity_id id = ar["entity_id"]. template as<entity_id>();
+        std::string c_name = ar["comp_name"]. template as<std::string();
+
+        entity e (id);
+        auto c = malt::add_component(c_name.c_str(), e);
+
         throw std::runtime_error("it's not implemented yet :(");
     }
 
