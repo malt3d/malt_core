@@ -8,14 +8,27 @@
 #include <malt/utilities.hpp>
 
 namespace malt {
+
+    /*
+     * Entity definition of malt's entity component architecture
+     * An entity is identified by an integer and entity objects
+     * do not store any data regarding an actual _entity_.
+     *
+     * This class exists so that some common functionality about
+     * entities can be used as a regular object:
+     *      auto some_comp = entity.get_component<transform>();
+     *      // instead of
+     *      auto some_comp = malt::get_component<transform>(entity);
+     */
     class entity
     {
+        /*
+         * identifier of this entity
+         */
         entity_id id;
 
         template<class T>
-        friend
-        class game;
-
+        friend class game;
         friend entity_id detail::get_id(const entity& e);
 
     public:
@@ -33,10 +46,24 @@ namespace malt {
         template<class T>
         T* add_component();
 
+        /*
+         * delivers the given message to all components of this entity
+         */
         template<class MsgT, class... ArgTs>
         void deliver_message(MsgT, const ArgTs& ... args);
 
+        /*
+         * sets the name of this entity
+         *
+         * names live in a global vector, therefore updating the name
+         * through one entity object updates the name for all entitites
+         * sharing the same id
+         */
         void set_name(std::string name);
+
+        /*
+         * gets the name of this entity
+         */
         const std::string& get_name() const;
     };
 }

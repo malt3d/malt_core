@@ -32,7 +32,7 @@ namespace malt
     void deserialize(ArT&& ar, PrimitiveT& x)
     {
         x = ar. template as<PrimitiveT>();
-    };
+    }
 
     template <class ArT, class PrimitiveT,
             class = std::enable_if_t<std::is_fundamental<std::decay_t<PrimitiveT>>::value>>
@@ -50,13 +50,13 @@ namespace malt
                                 // could leave it empty, but setting manually in text
                                 // is cumbersome
         ar["comp_name"] = static_reflect(meta::type<CompT>{}).name;
-    };
+    }
 
     template <class ArT, class CompT>
     void deserialize(ArT&& ar, track_ptr<CompT>& ptr)
     {
         throw std::runtime_error("it's not implemented yet :(");
-    };
+    }
 
     template <class ArT, class T>
     std::enable_if_t<!std::is_fundamental<std::decay_t<T>>::value>
@@ -79,9 +79,9 @@ namespace malt
 
 namespace glm
 {
-    PUBLIC_REFLECT(vec2, MEM(x), MEM(y));
-    PUBLIC_REFLECT(vec3, MEM(x), MEM(y), MEM(z));
-    PUBLIC_REFLECT(quat, MEM(w), MEM(x), MEM(y), MEM(z));
+    PUBLIC_REFLECT(vec2, MEM(x), MEM(y))
+    PUBLIC_REFLECT(vec3, MEM(x), MEM(y), MEM(z))
+    PUBLIC_REFLECT(quat, MEM(w), MEM(x), MEM(y), MEM(z))
 
     inline std::ostream& operator<<(std::ostream& os, const vec3& v)
     {

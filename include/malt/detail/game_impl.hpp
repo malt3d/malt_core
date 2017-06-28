@@ -159,7 +159,7 @@ namespace malt
 
             m_erased_destroyers.emplace_back([&](entity_id id) -> void
             {
-                auto comp = get_mgr(meta::type<type1>{}).get_component(id);
+                auto comp = this->get_mgr(meta::type<type1>{}).get_component(id);
                 this->destroy_comp(comp);
             });
 

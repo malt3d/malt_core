@@ -13,7 +13,17 @@
 
 namespace malt
 {
-    class MALT_PUBLIC component : public tracked
+    /*
+     * Base component class for the entity component
+     * architecture of malt
+     *
+     * Although it should be used as a base class for every
+     * component type in malt, this class is not designed to
+     * be used as a base class for polymorphic class hierarchies;
+     * thus the non-virtual protected destructor
+     */
+    class MALT_PUBLIC component
+            : public tracked
     {
         entity m_e;
         const reflection::icomponent* m_type;
@@ -21,14 +31,15 @@ namespace malt
 
         template <class T>
         friend class game;
-
         template <class T>
         friend class component_mgr;
-
         friend const reflection::icomponent* dynamic_reflect(component*);
 
-    public:
+    protected:
+        ~component() = default;
         component() = default;
+
+    public:
         component(const component&) = delete;
         component(component&&) = default;
         entity get_entity() const;

@@ -14,6 +14,13 @@ addons:
 script:
   - sudo ln -s /usr/bin/gcc-6 /usr/local/bin/gcc
   - sudo ln -s /usr/bin/g++-6 /usr/local/bin/g++
+  - git clone https://github.com/jbeder/yaml-cpp ../yaml
+  - cd ../yaml
+  - mkdir build
+  - cd build
+  - cmake ..
+  - sudo cmake --build . -- -j4 install
+  - cd ../malt_core
   - git clone https://github.com/malt3d/malt_cmake ../malt_cmake
   - mkdir build
   - cd build

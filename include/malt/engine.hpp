@@ -84,7 +84,7 @@ namespace malt
 
     /*
      * Destroys the given entity
-     *
+     * All components belonging to this entity are destroyed as well
      */
     void destroy(entity e);
 
