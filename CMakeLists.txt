@@ -8,8 +8,10 @@ include(Malt)
 include(CMakeGet)
 
 cmake_get(jbeder/yaml-cpp PREFIX ${CMAKE_CURRENT_BINARY_DIR}/deps)
+cmake_get(g-truc/glm PREFIX ${CMAKE_CURRENT_BINARY_DIR}/deps)
 list(APPEND CMAKE_PREFIX_PATH ${CMAKE_CURRENT_BINARY_DIR}/deps)
 find_package(yaml-cpp REQUIRED)
+find_package(glm REQUIRED)
 
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fno-rtti")
 
@@ -64,6 +66,7 @@ set_target_properties(malt_core PROPERTIES C_VISIBILITY_PRESET hidden)
 
 target_link_libraries(malt_core PUBLIC ${YAML_CPP_LIBRARIES})
 target_include_directories(malt_core PUBLIC ${YAML_CPP_INCLUDE_DIR})
+target_include_directories(malt_core PUBLIC ${GLM_INCLUDE_DIRS})
 
 malt_install(malt_core ${HEADER_PATH})
 
