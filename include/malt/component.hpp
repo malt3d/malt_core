@@ -37,9 +37,9 @@ namespace malt
 
     protected:
         ~component() = default;
-        component() = default;
 
     public:
+        component() = default;
         component(const component&) = delete;
         component(component&&) = default;
         entity get_entity() const;

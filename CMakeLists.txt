@@ -5,6 +5,11 @@ LIST(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/../malt_cmake/")
 set(CMAKE_CXX_STANDARD 14)
 
 include(Malt)
+include(CMakeGet)
+
+cmake_get(jbeder/yaml-cpp PREFIX ${CMAKE_CURRENT_BINARY_DIR}/deps)
+list(APPEND CMAKE_PREFIX_PATH ${CMAKE_CURRENT_BINARY_DIR}/deps)
+find_package(yaml-cpp REQUIRED)
 
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fno-rtti")
 
