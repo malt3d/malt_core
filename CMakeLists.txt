@@ -13,6 +13,9 @@ list(APPEND CMAKE_PREFIX_PATH ${CMAKE_CURRENT_BINARY_DIR}/deps)
 find_package(yaml-cpp REQUIRED)
 find_package(glm REQUIRED)
 
+find_package(yaml-cpp REQUIRED)
+find_package(glm REQUIRED)
+
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fno-rtti")
 
 if ("${CMAKE_CXX_COMPILER_ID}" MATCHES "Clang")
