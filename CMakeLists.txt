@@ -7,12 +7,6 @@ set(CMAKE_CXX_STANDARD 14)
 include(Malt)
 include(CMakeGet)
 
-cmake_get(jbeder/yaml-cpp PREFIX ${CMAKE_CURRENT_BINARY_DIR}/deps)
-cmake_get(g-truc/glm PREFIX ${CMAKE_CURRENT_BINARY_DIR}/deps)
-list(APPEND CMAKE_PREFIX_PATH ${CMAKE_CURRENT_BINARY_DIR}/deps)
-find_package(yaml-cpp REQUIRED)
-find_package(glm REQUIRED)
-
 find_package(yaml-cpp REQUIRED)
 find_package(glm REQUIRED)
 
@@ -53,6 +47,7 @@ set(HEADER_FILES
         ${HEADER_PATH}/strided_iterator.hpp
         ${HEADER_PATH}/malt_reflect.hpp
         ${HEADER_PATH}/serialization.hpp
+        ${HEADER_PATH}/debug.hpp
 
         ${HEADER_PATH}/detail/malt_reflect_impl.hpp
         ${HEADER_PATH}/detail/entity_info.hpp
