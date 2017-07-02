@@ -6,6 +6,9 @@ set(CMAKE_CXX_STANDARD 14)
 
 include(Malt)
 
+find_package(yaml-cpp REQUIRED)
+find_package(glm REQUIRED)
+
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fno-rtti")
 
 if ("${CMAKE_CXX_COMPILER_ID}" MATCHES "Clang")
@@ -56,6 +59,10 @@ malt_def_module(malt_core)
 
 set_target_properties(malt_core PROPERTIES CXX_VISIBILITY_PRESET hidden)
 set_target_properties(malt_core PROPERTIES C_VISIBILITY_PRESET hidden)
+
+target_link_libraries(malt_core PUBLIC ${YAML_CPP_LIBRARIES})
+target_include_directories(malt_core PUBLIC ${YAML_CPP_INCLUDE_DIR})
+target_include_directories(malt_core PUBLIC ${GLM_INCLUDE_DIRS})
 
 malt_install(malt_core ${HEADER_PATH})
 
