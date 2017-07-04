@@ -11,6 +11,7 @@
 #include <unordered_map>
 #include <tuple>
 #include <malt/detail/entity_info.hpp>
+#include <malt/error.hpp>
 
 namespace malt
 {
@@ -66,7 +67,7 @@ namespace malt
 
         static constexpr auto component_count = meta::length_t(comp_ts{});
 
-        std::unordered_map<int, comp_t_id> m_hash_to_index;
+        std::unordered_map<int, comp_index_t> m_hash_to_index;
         std::vector<std::function<malt::component*(entity_id)>> m_erased_adders;
         std::vector<std::function<malt::component*(entity_id)>> m_erased_getters;
         std::vector<std::function<void(entity_id)>> m_erased_destroyers;
@@ -93,7 +94,7 @@ namespace malt
             return m_entity_manager.get_name(id);
         }
 
-        malt::component* erased_add_component(comp_t_id c, entity_id e)
+        malt::component* erased_add_component(comp_index_t c, entity_id e)
         {
             at_exit([this, e, c] {
                 m_entity_manager.add_component(e, c);
@@ -103,16 +104,21 @@ namespace malt
 
         malt::component* hash_add_component(size_t c_hash, entity_id e)
         {
-            comp_t_id c = m_hash_to_index[c_hash];
+            auto it = m_hash_to_index.find(c_hash);
+            if (it == m_hash_to_index.end())
+            {
+                throw malt::undefined_component("component with hash " + std::to_string(c_hash) + " does not exist!");
+            }
+            comp_index_t c = it->second;
             return erased_add_component(c, e);
         }
 
-        malt::component* erased_get_component(comp_t_id c, entity_id e)
+        malt::component* erased_get_component(comp_index_t c, entity_id e)
         {
             return m_erased_getters[c](e);
         }
 
-        void erased_destory_component(comp_t_id c, entity_id e)
+        void erased_destory_component(comp_index_t c, entity_id e)
         {
             m_erased_destroyers[c](e);
         }

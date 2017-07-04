@@ -4,6 +4,5 @@ namespace malt
 {
 namespace debug
 {
-
 }
 }

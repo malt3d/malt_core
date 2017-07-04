@@ -7,7 +7,8 @@
 namespace malt
 {
     using entity_id = uint32_t;
-    using comp_t_id = uint32_t;
+    using comp_index_t = uint32_t;
+    using comp_hash_t = size_t;
     using module_id = uint32_t;
 
     class entity;
