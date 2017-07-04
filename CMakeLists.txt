@@ -47,6 +47,8 @@ set(HEADER_FILES
         ${HEADER_PATH}/strided_iterator.hpp
         ${HEADER_PATH}/malt_reflect.hpp
         ${HEADER_PATH}/serialization.hpp
+        ${HEADER_PATH}/debug.hpp
+        ${HEADER_PATH}/error.hpp
 
         ${HEADER_PATH}/detail/malt_reflect_impl.hpp
         ${HEADER_PATH}/detail/entity_info.hpp

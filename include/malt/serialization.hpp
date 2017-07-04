@@ -59,7 +59,14 @@ namespace malt
         entity_id id = ar["entity_id"]. template as<entity_id>();
         std::string c_name = ar["comp_name"]. template as<std::string>();
 
+
         entity e (id);
+
+        if (e == malt::nullentity)
+        {
+            return;
+        }
+
         auto c = malt::get_component(c_name.c_str(), e);
 
         if (!c)

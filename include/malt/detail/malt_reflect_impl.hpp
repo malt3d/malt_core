@@ -14,15 +14,15 @@ namespace malt
         class component_type : public icomponent
         {
             mutable std::vector<const icomponent*> m_bases;
-            comp_t_id m_component_index;
+            comp_index_t m_component_index;
 
         public:
-            void set_index(comp_t_id id)
+            void set_index(comp_index_t id)
             {
                 m_component_index = id;
             }
 
-            comp_t_id get_index() const override
+            comp_index_t get_index() const override
             {
                 return m_component_index;
             }

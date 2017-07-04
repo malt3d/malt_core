@@ -33,7 +33,7 @@ namespace malt {
         {
         public:
             virtual const char* get_name() const = 0;
-            virtual comp_t_id get_index() const = 0;
+            virtual comp_index_t get_index() const = 0;
             virtual size_t get_type_hash() const = 0;
             virtual module_id get_module_id() const = 0;
             virtual malt::component* add_component(entity id) const = 0;

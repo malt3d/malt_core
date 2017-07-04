@@ -32,11 +32,11 @@ namespace malt {
         friend entity_id detail::get_id(const entity& e);
 
     public:
-        entity()
+        constexpr entity()
                 :id(0)
         { }
 
-        explicit entity(entity_id id)
+        explicit constexpr entity(entity_id id)
                 :id(id)
         { }
 
@@ -65,7 +65,14 @@ namespace malt {
          * gets the name of this entity
          */
         const std::string& get_name() const;
+
+        bool operator==(const entity& rhs)
+        {
+            return id == rhs.id;
+        }
     };
+
+    static constexpr entity nullentity(0);
 }
 
 #include <malt/engine.hpp>

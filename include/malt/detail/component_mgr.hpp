@@ -71,7 +71,7 @@ namespace malt
         void synchronize();
 
     public:
-        component_mgr(comp_t_id);
+        component_mgr(comp_index_t);
         component_mgr(const component_mgr&) = delete;
         component_mgr(component_mgr&&) = default;
         ~component_mgr();

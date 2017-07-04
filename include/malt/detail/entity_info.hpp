@@ -60,12 +60,12 @@ namespace detail
             m_details.erase(it);
         }
 
-        void add_component(entity_id eid, comp_t_id cid)
+        void add_component(entity_id eid, comp_index_t cid)
         {
             get_details(eid).components[cid] = true;
         }
 
-        void remove_component(entity_id eid, comp_t_id cid)
+        void remove_component(entity_id eid, comp_index_t cid)
         {
             get_details(eid).components[cid] = false;
         }
