@@ -17,8 +17,8 @@ namespace malt
         template <class CompT>
         struct component_adapter
         {
-            static CompT* add_component(entity_id);
-            static CompT* get_component(entity_id);
+            static CompT* add_component(entity_id) MALT_WEAK_SYMBOL;
+            static CompT* get_component(entity_id) MALT_WEAK_SYMBOL;
             static void destroy(CompT*) MALT_WEAK_SYMBOL;
             static erased_range<CompT, component> get_components() MALT_WEAK_SYMBOL;
         };
@@ -34,12 +34,15 @@ namespace malt
 
         void destroy(entity) MALT_WEAK_SYMBOL;
 
+        entity find_entity(const std::string& name) MALT_WEAK_SYMBOL;
         entity create_entity() MALT_WEAK_SYMBOL;
 
         void post_frame() MALT_WEAK_SYMBOL;
         void terminate() MALT_WEAK_SYMBOL;
         bool is_terminated() MALT_WEAK_SYMBOL;
+
         float get_delta_time() MALT_WEAK_SYMBOL;
+        uint64_t get_current_frame() MALT_WEAK_SYMBOL;
 
         malt::component* add_component(size_t comp_hash, entity) MALT_WEAK_SYMBOL;
         malt::component* get_component(size_t comp_hash, entity) MALT_WEAK_SYMBOL;
@@ -73,21 +76,23 @@ namespace malt
         return impl::component_adapter<CompT>::get_components();
     }
 
+    entity find_entity(const std::string& name) MALT_PUBLIC;
+
     /*
      * Creates a new entity
      */
-    entity create_entity();
+    entity create_entity() MALT_PUBLIC;
 
     /*
      * Creates a new entity and sets the name of it
      */
-    entity create_entity(std::string name);
+    entity create_entity(std::string name) MALT_PUBLIC MALT_WEAK_SYMBOL;
 
     /*
      * Destroys the given entity
      * All components belonging to this entity are destroyed as well
      */
-    void destroy(entity e);
+    void destroy(entity e) MALT_PUBLIC;
 
     /*
      * Destroys the given component
@@ -140,6 +145,14 @@ namespace malt
          */
         inline float get_delta_time() {
             return impl::get_delta_time();
+        }
+
+        /**
+         * Returns the number of frames that has been rendered so far
+         * @return current frame number
+         */
+        inline uint64_t get_current_frame() {
+            return impl::get_current_frame();
         }
     }
 }

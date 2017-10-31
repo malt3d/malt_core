@@ -90,6 +90,17 @@ namespace detail
         {
             get_details(id).name = std::move(name);
         }
+
+        entity_id find_entity(const std::string& name)
+        {
+            auto it = std::find_if(m_details.begin(), m_details.end(), [&name](const auto& d) {
+                return d.name == name;
+            });
+            if (it == m_details.end()) {
+                return -1;
+            }
+            return it->id;
+        }
     };
 }
 }
