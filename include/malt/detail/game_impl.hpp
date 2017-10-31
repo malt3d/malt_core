@@ -54,6 +54,11 @@ namespace malt
         impl::destroy(e);
     }
 
+    template <class T>
+    entity_id game<T>::find_entity(const std::string& name)
+    {
+        return m_entity_manager.find_entity(name);
+    }
 
     template <class T>
     void game<T>::synchronize()
