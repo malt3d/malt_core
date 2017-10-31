@@ -94,6 +94,8 @@ namespace malt
             return m_entity_manager.get_name(id);
         }
 
+        entity_id find_entity(const std::string& name);
+
         malt::component* erased_add_component(comp_index_t c, entity_id e)
         {
             at_exit([this, e, c] {

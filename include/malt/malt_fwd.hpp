@@ -3,6 +3,7 @@
 //
 
 #include <cstdint>
+#include <cstddef>
 
 namespace malt
 {

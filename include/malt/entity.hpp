@@ -15,7 +15,7 @@ namespace malt {
      * do not store any data regarding an actual _entity_.
      *
      * This class exists so that some common functionality about
-     * entities can be used as a regular object:
+     * entities can be used as a regular objects:
      *      auto some_comp = entity.get_component<transform>();
      *      // instead of
      *      auto some_comp = malt::get_component<transform>(entity);
